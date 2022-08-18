@@ -7,11 +7,11 @@ const products = [
 
 
 
-const renderProduct = (products) => 
+const renderProduct = (product) => 
     `<div class="card">
         <img src="img/card1.svg" alt="#">
-        <h2 class="heading2">${products.title}</h2>
-        <p class="value">${products.price}</p>
+        <h2 class="heading2">${product.title}</h2>
+        <p class="value">${product.price}</p>
         <button class="btn">Купить</button>
     </div>`;
 
