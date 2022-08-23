@@ -37,13 +37,38 @@ class ProductItem{
             <button class="btn">Купить</button>
         </div>`;
     }
+    getSum() {
+        let i = 0;
+        this.goods.array.forEach(item => {
+            i += product.price;
+        });
+        console.log(i)
+    }
 }
 
-getSum() {
-    let i = 0;
-    this.goods.array.forEach(element => {
-        i += product.price;
-    });
+
+let list = new ProductList();
+list.render();
+list.getSum();
+
+class Basket{
+    addItem(){
+
+    }
+
+    removeItem(){
+
+    }
+
+    render(){
+
+    }
+}
+
+class BasketElement {
+    render(){
+
+    }
 }
 
 
