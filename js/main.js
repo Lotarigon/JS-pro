@@ -87,6 +87,7 @@ class BasketElement {
 //     {id:3 ,title: 'Keyboard' ,price:2500},
 //     {id:4 ,title: 'Phone' ,price:15000},
 // ];
+.
 
 
 
