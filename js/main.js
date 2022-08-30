@@ -1,76 +1,73 @@
-const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/catalogData.json'
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses'
 
-class Productlist {
+class ProductsList {
     constructor(container = '.products'){
         this.container = container;
         this.goods = [];
-        this.getProducts()
+        this._getProducts()
             .then(data => {
                 this.goods = [...data];
                 this.render()
             });
     }
+    _getProducts() {
+        return fetch (`${API}/catalogData.json`)
+            .then(result => result.json())
+            .catch(error => {
+                console.log(error);
+            })
+    }
+    
+    calcSum() {
+        return this.goods.reduce((accum,item) => accum +=item.price, 0);
+    }
+    
+    
+    render() {
+        const block = document.querySelector(this.container);
+        for (let product of this.goods) {
+            const productObj = new ProductItem(product);
+            block.insertAdjacentHTML('beforeend',productObj.render)
+        }
+    }
     
 }   
 
-getProducts() {
-    return fetch (`${API}/catalogData.json`)
-        .then(result => result.json())
-        .catch(error => {
-            console.log(error);
-        })
-}
-
-calcSum() {
-    return this.goods.reduce((accum,item) => accum +=item.price, 0);
-}
-
-
-render() {
-    const block = document.querySelector(this.container);
-    for (let product of this.goods) {
-        const productObj = new ProductItem(product);
-        block.insertAdjacentHTML('beforeend', productObj.render());
-    }
-}
 
 
 class ProductItem{
     constructor(product){
-        this.title = product.title;
-        this.id = product.id;
+        this.title = product.product_name;
         this.price = product.price;
+        this.id = product.id_product;
     }
     render() {
-        `<div class="card">
+        return `<div class="product-item" data-id="${this.id}">
             <img src="img/card1.svg" alt="#">
             <div class="desc">
-                <h2 class="heading2">${this.title}</h2>
+                <h3 class="heading3">${this.title}</h3>
                 <p class="value">${this.price}</p>
-                <button class="btn">Купить</button>
+                <button class="buy-btn">Купить</button>
             </div>
         </div>`;
     }
 }
 
-
-let list = new ProductList();
-list.render();
-list.getSum();
+let list = new ProductsList();
 
 class Basket{
-    constructor (container = '.cart') {    
+    constructor (container = '.cart-block') {    
         this.container = container;
         this.goods = [];
-        this.clickBasket()
-        this.getBasketItem()
+        this._clickBasket()
+        this._getBasketItem()
             .then(data =>{
-                this.goods = data.contents
+                this.goods = data.contents;
                 this.render ();
             })
     }
 
-    getBasketItem() {
+    _getBasketItem() {
         return fetch (`${API}/getBasket.json`)
             .then(result => result.json())
             .catch(error =>{
@@ -86,14 +83,14 @@ class Basket{
         }
     }
 
-    clickBasket () {
-        document.querySelector(".button").addEventListener('ckick', () =>{              
-            document.querySelector(this.container).classList.toggle('hidden');
+    _clickBasket () {
+        document.querySelector(".btn-cart").addEventListener('ckick', () =>{              
+            document.querySelector(this.container).classList.toggle('invisible');
         })
     }
 }
 
-class BasketElement {
+class BasketItem {
     render(product){
         return `<div class = "cart-item" data-id="${product.id_product}">
                 <div class = "product-bio">
