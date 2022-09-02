@@ -1,1 +1,44 @@
-/*# sourceMappingURL=styles.css.map */
+.search-form {
+  display: flex;
+  justify-content: end;
+  background-color: rgb(74, 58, 58);
+}
+
+.search-field {
+  margin-right: 10px;
+  border: 1px solid #000;
+}
+
+.btn-search {
+  height: 50px;
+}
+
+.fas {
+  height: 50px;
+}
+
+.btn-cart {
+  height: 50px;
+  margin-left: 30px;
+}
+
+.cart-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cart-item {
+  padding: 10px;
+  margin-bottom: 30px;
+  background-color: rgb(85, 59, 56);
+}
+
+.products {
+  background-color: rgb(78, 28, 28);
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  align-items: center;
+}/*# sourceMappingURL=styles.css.map */

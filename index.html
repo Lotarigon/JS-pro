@@ -8,15 +8,55 @@
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    <header class="header">
-        <div class="cart ">
-          <button class="button">Корзина</button>
-          <div class="cart-block invisible"></div>
-        </div>
-    </header>
-    <main>
-        <div class="products"></div>
-    </main>
+    <div class="app">
+        <header>
+            <div class="cart">
+                <form action="#" class="search-form" @submit.prevent="filtered">
+                    <input type="text" class="search-field" v-model="userSearch">
+                    <button type="submit" class="btn-search">
+                        <i class="fas fa-search">Искать</i>
+                    </button>
+                </form>
+                <button class="btn-cart" type="button" @click="showCart = !showCart">Корзина</button>
+                <div class="cart-block" v-show="showCart">
+                    <p v-if="!cartItems.lenght">Cart is empty</p>
+                    <div class="cart-item" v-for="item of cartItems" :key="item.id_product">
+                        <div class="product-bio">
+                            <img src="img/card1.svg" alt="#">
+                            <div class="product-desc">
+                                <div class="product-title">
+                                    {{item.product_name}}
+                                </div>   
+                                <div class="product-quantity">Quantity: {{item.quantity}}</div>
+                                <div class="product-single-price">${{item.price}} each  </div>
+                            </div>
+                        </div>
+                        <div class="right_block">
+                            <div class="product-price">
+                                {{item.quantity*item.price}}
+                            </div>
+                            <button class="del-btn" @click="remove(item)">
+                                &times;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="products">
+                <div class="product-item" v-for="product of filtered" :key="product.id_product">
+                  <img src="img/card1.svg" alt="">
+                  <div class="desc">
+                    <h3>{{product.product_name}}</h3>
+                    <p>{{product.price}}</p>
+                    <button class="buy-btn" @click="addProduct(product)">Купить</button>
+                  </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
     <script src="js/main.js"></script>
     
 </body>

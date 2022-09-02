@@ -1,4 +1,6 @@
-// const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses'
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses'
+
+
 
 // class ProductsList {
 //     constructor(container = '.products'){
@@ -103,7 +105,7 @@
 //             </div>
 //             <div class= "right-block>
 //                 <p class = "product-price"> ${product.quantity * product.price} $</p>
-//                 <button class = "del-btn" data-id="${product.id_product}">x</button>
+//                 <button class = "del-btn" data-id="${product.id_product}">Купить</button>
 //             </div>
 //             </div>`
 //     }
@@ -121,30 +123,97 @@
 
 
 
-// // const products = [
-// //     {id:1 ,title: 'Notebook' ,price:2000},
-// //     {id:2 ,title: 'Mouse' ,price:1000},
-// //     {id:3 ,title: 'Keyboard' ,price:2500},
-// //     {id:4 ,title: 'Phone' ,price:15000},
-// // ];
+// const products = [
+//     {id:1 ,title: 'Notebook' ,price:2000},
+//     {id:2 ,title: 'Mouse' ,price:1000},
+//     {id:3 ,title: 'Keyboard' ,price:2500},
+//     {id:4 ,title: 'Phone' ,price:15000},
+// ];
 
 
 
 
-// // const renderProduct = (product) => 
-// //     `<div class="card">
-// //         <img src="img/card1.svg" alt="#">
-// //         <h2 class="heading2">${product.title}</h2>
-// //         <p class="value">${product.price}</p>
-// //         <button class="btn">Купить</button>
-// //     </div>`;
-
-// // const renderPage = list => {
-// //     document.querySelector('.products').innerHTML = 
-// //         (list.map(product => renderProduct(product)))
-// // };
+// const renderProduct = (product) => 
+//     `<div class="card">
+//         <img src="img/card1.svg" alt="#">
+//          <h2 class="heading2">${product.title}</h2>
+//          <p class="value">${product.price}</p>
+//          <button class="btn">Купить</button>
+//      </div>`
+//  const renderPage = list => {
+//      document.querySelector('.products').innerHTML = 
+//          (list.map(product => renderProduct(product)))
+//  };
     
 
-// // renderPage(products);
+//  renderPage(products);
+
+ 
+const app = new Vue({
+    el: '#app',
+    data: {
+        userSearch: '',
+        showCart: false,
+        catalogUrl: '/catalogData.json',
+        cartItems: [],
+        filtered:[],
+        products:[]
+    },
+    methods: {
+        getJson(url){
+            return fetch(url)
+            .then(result => result.json())
+            .catch(error => console.log(error))
+        },
+        addProduct(item){
+            this.getJson(`${API}/addToBasket.json`)
+                .then(data => {
+                    if(data.result === 1){
+                        let find = this.cartItems.find(el => el.id_product === item.id_product);
+                        if (find) {
+                            find.quantity++;
+                        } else {
+                            const prod = Object.assign({quantity: 1}, item);
+                            this.cartItems.push(prod)
+                        }
+                    }
+                })
+        },
+
+        remove (item){
+            this.getJson(`${API}/deleteFromBasket.json`)
+                .then(data => {
+                    if (data.result === 1){
+                        if (item.quantity>1){
+                            item.quantity--;
+                        } else {
+                            this.cartItems.splice(this.cartItems.indexOf(item), 1);
+                        }
+                    }
+                })
+        },
+
+        filter(){
+            let regexp = new RegExp(this.userSearch,'i');
+            this.filter = this.products.filter(el => regexp.test(el.product_name));
+        }
+    },
+    mounted(){
+        this.getJson(`${API + this.catalogUrl}`)
+            .then (data => {
+                for (let item of data.contents){
+                    this.cartItems.push(item);
+                }
+            });
+        
+        this.getJson(`${API + this.catalogUrl}`)
+            .then(data => {
+                for (let item of data){
+                    this.$data.products.push(item);
+                    this.$data.filtered.push(item);
+                }
+            });
+    }
+});
 
 
